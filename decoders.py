@@ -78,7 +78,7 @@ class NMTDecoder(nn.Module):
         self.target_embedding = nn.Embedding(num_embeddings=num_embeddings, 
                                              embedding_dim=embedding_size, 
                                              padding_idx=0)
-        freeze_layer(self.target_embedding)
+        #freeze_layer(self.target_embedding)
 
         self.gru_cell = nn.GRUCell(embedding_size + rnn_hidden_size, 
                                    rnn_hidden_size)
