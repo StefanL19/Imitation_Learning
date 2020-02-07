@@ -212,7 +212,7 @@ class NMTDecoder(nn.Module):
 
             # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
             target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
-            print(self.target_embedding(torch.arange(0, 1, dtype=torch.long).to(encoder_state.device)))
+            print(self.target_embedding(torch.arange(10, 11, dtype=torch.long).to(encoder_state.device)))
             # Add an artificial dimension to the embedding predictions
             embedding_prediction = embedding_prediction.unsqueeze(1)
 
