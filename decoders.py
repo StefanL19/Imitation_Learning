@@ -200,7 +200,7 @@ class NMTDecoder(nn.Module):
                 all_target_vocab_indices.append(list(range(self.num_embeddings)))
 
             # Convert the indices to a torch tensor
-            all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(self.target_embedding.device)
+            all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
 
             # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
             target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
