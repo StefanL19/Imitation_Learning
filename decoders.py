@@ -195,10 +195,12 @@ class NMTDecoder(nn.Module):
             embedding_prediction = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
 
             # Get the indeces of all words included in the target vocab
-            all_target_vocab_indices = []
-            for i in range(0, batch_size):
-                all_target_vocab_indices.append(list(range(self.num_embeddings)))
+            # all_target_vocab_indices = []
+            # for i in range(0, batch_size):
+            #     all_target_vocab_indices.append(list(range(self.num_embeddings)))
 
+            all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size)
+            
             # Convert the indices to a torch tensor
             all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
 
