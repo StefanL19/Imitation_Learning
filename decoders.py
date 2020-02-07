@@ -74,7 +74,7 @@ class NMTDecoder(nn.Module):
         self.target_embedding = nn.Embedding(num_embeddings=num_embeddings, 
                                              embedding_dim=embedding_size, 
                                              padding_idx=0)
-        self.target_embedding = self.target_vocab_embeddings.detach()
+        self.target_embedding = self.target_embedding.detach()
         
         self.gru_cell = nn.GRUCell(embedding_size + rnn_hidden_size, 
                                    rnn_hidden_size)
