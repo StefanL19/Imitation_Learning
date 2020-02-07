@@ -73,9 +73,8 @@ class NMTDecoder(nn.Module):
         self._rnn_hidden_size = rnn_hidden_size
         self.target_embedding = nn.Embedding(num_embeddings=num_embeddings, 
                                              embedding_dim=embedding_size, 
-                                             padding_idx=0,
-                                             freeze=True)
-        
+                                             padding_idx=0)
+
         self.gru_cell = nn.GRUCell(embedding_size + rnn_hidden_size, 
                                    rnn_hidden_size)
         self.hidden_map = nn.Linear(rnn_hidden_size, rnn_hidden_size)
@@ -208,7 +207,8 @@ class NMTDecoder(nn.Module):
 
             # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
             target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
-
+            target_vocab_embeddings.requires_grad = False
+            
             # Add an artificial dimension to the embedding predictions
             embedding_prediction = embedding_prediction.unsqueeze(1)
 
