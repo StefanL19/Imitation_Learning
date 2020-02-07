@@ -102,14 +102,6 @@ class NMTDecoder(nn.Module):
         self.attention_mechanism = attention_mechanism
         self.num_embeddings = num_embeddings
 
-        all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(32, 1).to(torch.device("cuda"))
-
-        # Convert the indices to a torch tensor
-        #all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
-
-        # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
-        self.target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
-
         print("The training mode is: ", training_mode)
     
     def _init_indices(self, batch_size):
@@ -213,14 +205,14 @@ class NMTDecoder(nn.Module):
             # for i in range(0, batch_size):
             #     all_target_vocab_indices.append(list(range(self.num_embeddings)))
 
-            # all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1).to(encoder_state.device)
+            all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1).to(encoder_state.device)
 
-            # # Convert the indices to a torch tensor
-            # #all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
+            # Convert the indices to a torch tensor
+            #all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
 
-            # # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
-            # target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
-
+            # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
+            target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
+            
             # Add an artificial dimension to the embedding predictions
             embedding_prediction = embedding_prediction.unsqueeze(1)
 
@@ -228,7 +220,7 @@ class NMTDecoder(nn.Module):
             embedding_prediction = embedding_prediction.repeat(1, self.num_embeddings, 1)
 
             # Calculate the cosine similarity
-            cosine_similarity = torch.nn.functional.cosine_similarity(self.target_vocab_embeddings,embedding_prediction, dim=2)
+            cosine_similarity = torch.nn.functional.cosine_similarity(target_vocab_embeddings,embedding_prediction, dim=2)
 
             if use_sample:
                 #p_y_t_index = F.softmax(score_for_y_t_index * self._sampling_temperature, dim=1)
