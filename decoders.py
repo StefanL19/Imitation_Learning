@@ -88,13 +88,13 @@ class NMTDecoder(nn.Module):
         # self.classifier = nn.Linear(rnn_hidden_size * 2, num_embeddings)
 
         ## If we do not feed the context vectors as Bahdanau et al. does
-        self.classifier = nn.Linear(rnn_hidden_size, num_embeddings)
+        # self.classifier = nn.Linear(rnn_hidden_size, num_embeddings)
 
         ## If we apply factorization
         # The idea is that we will generate an embedding vector and this embedding vector
         # will be compared to all embedding vectors in the target vocabulary
         # the one with the most similarity will be returned
-        #self.classifier = nn.Linear(rnn_hidden_size, embedding_size)
+        self.classifier = nn.Linear(rnn_hidden_size, embedding_size)
 
         self.bos_index = bos_index
         self._sampling_temperature = 3
@@ -195,17 +195,30 @@ class NMTDecoder(nn.Module):
             prediction_vector = h_t
 
             ## Linear classifier on top of the prediction vector - If factorization method is not utilized
-            score_for_y_t_index = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
-            
+            #score_for_y_t_index = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
+           
+
             # # ## Linear classifier on top of the prediction vector - If factorization method is not utilized
-            # embedding_prediction = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
+            embedding_prediction = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
+
+
+            all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).to(encoder_state.device)
+            target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
+
+            # Some matrix normalization may be performed to get cosine similarity, but 
+            # embedding_prediction_norm = embedding_prediction / embedding_prediction.norm(dim=1)[:, None]
+            # target_vocab_embeddings = target_vocab_embeddings / target_vocab_embeddings.norm(dim=1)[:, None]
+
+            res = torch.mm(target_vocab_embeddings, embedding_prediction.transpose(0,1))
+
+            dot_similarity = res.transpose(0, 1)
 
             # # Get the indeces of all words included in the target vocab
             # # all_target_vocab_indices = []
             # # for i in range(0, batch_size):
             # #     all_target_vocab_indices.append(list(range(self.num_embeddings)))
 
-            # all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1).to(encoder_state.device)
+            # all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1)
 
             # # # Convert the indices to a torch tensor
             # all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
@@ -224,7 +237,7 @@ class NMTDecoder(nn.Module):
 
             if use_sample:
                 #p_y_t_index = F.softmax(score_for_y_t_index * self._sampling_temperature, dim=1)
-                p_y_t_index = F.softmax(score_for_y_t_index, dim=1)
+                p_y_t_index = F.softmax(dot_similarity, dim=1)
 
                 if self.training_mode:
                     #print("It is in training mode")
@@ -237,7 +250,7 @@ class NMTDecoder(nn.Module):
 
             # print("#######################################")
             # auxillary: collect the prediction scores
-            output_vectors.append(score_for_y_t_index)
+            output_vectors.append(dot_similarity)
 
         output_vectors = torch.stack(output_vectors).permute(1, 0, 2)
 
