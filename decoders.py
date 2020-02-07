@@ -59,6 +59,10 @@ def terse_attention(encoder_state_vectors, query_vector):
                                    vector_probabilities.unsqueeze(dim=2)).squeeze()
     return context_vectors, vector_probabilities
 
+def freeze_layer(layer):
+    for param in layer.parameters():
+        param.requires_grad = False
+
 class NMTDecoder(nn.Module):
     def __init__(self, num_embeddings, embedding_size, rnn_hidden_size, bos_index, attention_mechanism, training_mode=False):
         """
@@ -74,8 +78,8 @@ class NMTDecoder(nn.Module):
         self.target_embedding = nn.Embedding(num_embeddings=num_embeddings, 
                                              embedding_dim=embedding_size, 
                                              padding_idx=0)
-        self.target_embedding = self.target_embedding.detach()
-        
+        freeze_layer(self.target_embedding)
+
         self.gru_cell = nn.GRUCell(embedding_size + rnn_hidden_size, 
                                    rnn_hidden_size)
         self.hidden_map = nn.Linear(rnn_hidden_size, rnn_hidden_size)
