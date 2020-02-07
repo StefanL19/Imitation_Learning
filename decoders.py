@@ -88,13 +88,13 @@ class NMTDecoder(nn.Module):
         # self.classifier = nn.Linear(rnn_hidden_size * 2, num_embeddings)
 
         ## If we do not feed the context vectors as Bahdanau et al. does
-        # self.classifier = nn.Linear(rnn_hidden_size, num_embeddings)
+        self.classifier = nn.Linear(rnn_hidden_size, num_embeddings)
 
         ## If we apply factorization
         # The idea is that we will generate an embedding vector and this embedding vector
         # will be compared to all embedding vectors in the target vocabulary
         # the one with the most similarity will be returned
-        self.classifier = nn.Linear(rnn_hidden_size, embedding_size)
+        #self.classifier = nn.Linear(rnn_hidden_size, embedding_size)
 
         self.bos_index = bos_index
         self._sampling_temperature = 3
@@ -195,65 +195,54 @@ class NMTDecoder(nn.Module):
             prediction_vector = h_t
 
             ## Linear classifier on top of the prediction vector - If factorization method is not utilized
-            # score_for_y_t_index = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
+            score_for_y_t_index = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
             
-            ## Linear classifier on top of the prediction vector - If factorization method is not utilized
-            embedding_prediction = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
+            # ## Linear classifier on top of the prediction vector - If factorization method is not utilized
+            # embedding_prediction = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
 
+            # # Get the indeces of all words included in the target vocab
+            # # all_target_vocab_indices = []
+            # # for i in range(0, batch_size):
+            # #     all_target_vocab_indices.append(list(range(self.num_embeddings)))
 
-            # if use_sample:
-            #     #p_y_t_index = F.softmax(score_for_y_t_index * self._sampling_temperature, dim=1)
-            #     p_y_t_index = F.softmax(cosine_similarity, dim=1)
+            # all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1).to(encoder_state.device)
 
-            #     if self.training_mode:
-            #         #print("It is in training mode")
-            #         # In training mode sample from a multinomial distribution
-            #         y_t_index = torch.multinomial(p_y_t_index, 1).squeeze()
+            # # Convert the indices to a torch tensor
+            # #all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
+
+            # # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
+            # target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
+
+            # # Add an artificial dimension to the embedding predictions
+            # embedding_prediction = embedding_prediction.unsqueeze(1)
+
+            # # Repeat the embeddings prediction along the first axis, so they are suitable for cosine similarity measures
+            # embedding_prediction = embedding_prediction.repeat(1, self.num_embeddings, 1)
+
+            # # Calculate the cosine similarity
+            # cosine_similarity = torch.nn.functional.cosine_similarity(target_vocab_embeddings,embedding_prediction, dim=2)
+
+            if use_sample:
+                #p_y_t_index = F.softmax(score_for_y_t_index * self._sampling_temperature, dim=1)
+                p_y_t_index = F.softmax(score_for_y_t_index, dim=1)
+
+                if self.training_mode:
+                    #print("It is in training mode")
+                    # In training mode sample from a multinomial distribution
+                    y_t_index = torch.multinomial(p_y_t_index, 1).squeeze()
                 
-            #     else:
-            #         #print("It is not in training mode")
-            #         y_t_index = torch.argmax(p_y_t_index, 1)
+                else:
+                    #print("It is not in training mode")
+                    y_t_index = torch.argmax(p_y_t_index, 1)
 
             # print("#######################################")
             # auxillary: collect the prediction scores
-            output_vectors.append(embedding_prediction)
+            output_vectors.append(score_for_y_t_index)
 
-        outputs = []
-        for out in output_vectors:
-            all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1).to(encoder_state.device)
-            target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
-            embedding_prediction = out.unsqueeze(1)
-            embedding_prediction = embedding_prediction.repeat(1, self.num_embeddings, 1)
-            cosine_similarity = torch.nn.functional.cosine_similarity(target_vocab_embeddings,embedding_prediction, dim=2)
-            outputs.append(cosine_similarity)
-            
-        outputs = torch.stack(outputs).permute(1, 0, 2)
+        output_vectors = torch.stack(output_vectors).permute(1, 0, 2)
 
         stacked_attentions = torch.stack(all_attentions, dim=2)
         stacked_attentions = stacked_attentions.view(stacked_attentions.size()[0], stacked_attentions.size()[1], stacked_attentions.size()[2])
 
 
-        return outputs, stacked_attentions
-
-
-# # Get the indeces of all words included in the target vocab
-#             # all_target_vocab_indices = []
-#             # for i in range(0, batch_size):
-#             #     all_target_vocab_indices.append(list(range(self.num_embeddings)))
-
-#             all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1).to(encoder_state.device)
-
-#             # Convert the indices to a torch tensor
-#             #all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
-
-#             # This should effectively return a tensor of shape BSxTarget_Vocab_SizexEmb_Dim
-#             target_vocab_embeddings = self.target_embedding(all_target_vocab_indices)
-            
-#             # Add an artificial dimension to the embedding predictions
-#             embedding_prediction = embedding_prediction.unsqueeze(1)
-
-#             # Repeat the embeddings prediction along the first axis, so they are suitable for cosine similarity measures
-#             embedding_prediction = embedding_prediction.repeat(1, self.num_embeddings, 1)
-
-#             # Calculate the cosine similarity
-#             cosine_similarity = torch.nn.functional.cosine_similarity(target_vocab_embeddings,embedding_prediction, dim=2)
+        return output_vectors, stacked_attentions
