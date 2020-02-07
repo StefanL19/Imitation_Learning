@@ -199,7 +199,7 @@ class NMTDecoder(nn.Module):
             # for i in range(0, batch_size):
             #     all_target_vocab_indices.append(list(range(self.num_embeddings)))
 
-            all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size)
+            all_target_vocab_indices = torch.arange(0, self.num_embeddings, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1)
 
             # Convert the indices to a torch tensor
             #all_target_vocab_indices = torch.LongTensor(all_target_vocab_indices).to(encoder_state.device)
