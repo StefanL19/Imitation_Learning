@@ -135,7 +135,7 @@ args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
                  num_epochs=15,
                  early_stopping_criteria=10,              
                  source_embedding_size=48, 
-                 target_embedding_size=48,
+                 target_embedding_size=24,
                  encoding_size=256,
                  catch_keyboard_interrupt=True)
 
