@@ -15,6 +15,7 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm_notebook
 from vocabulary import SequenceVocabulary
+import time
 
 def find_pair(seq, a, b):
     i = 1
@@ -71,6 +72,8 @@ class NMTVectorizer(object):
 
         vocabulary_length = len(self.target_vocab)
 
+        # start = time.time()
+
         # The target vocabulary has shape: NUMBER_WORDS x VOCAB_SIZE
         # Those are the target vectors for each one of the words in the sentence
         vector = np.zeros((vector_length, vocabulary_length), dtype=np.double)
@@ -98,6 +101,9 @@ class NMTVectorizer(object):
         # Fill with the rest with the mask index
         for word_idx in range(len(indices), vector_length):
             vector[word_idx][mask_index] = 1. 
+
+        # end = time.time()
+        # print(end - start)
 
         return vector
 
@@ -127,14 +133,24 @@ class NMTVectorizer(object):
 
         # TODO Some changes should be made here, so the whole thing operates on Bigrams and Trigrams
         # Several target indices should be returned for each one of the words
+        #start = time.time()
+
         all_target_tokens = text.split(" ")
+
+        # Prune the bigrams
+        included_bigrams = []
+        for bigram in self.target_vocab.bigrams:
+            exists = bigram.split(" ") in [all_target_tokens[i:i+2] for i in range(len(all_target_tokens) - 1)]
+            if exists:
+                included_bigrams.append(bigram)
+
         all_indices = []
         for idx, token in enumerate(all_target_tokens):
             # print(token)
             # print("------------------------------")
             future_tokens = all_target_tokens[idx:]
             future_bigrams = []
-            for bigram in self.target_vocab.bigrams:
+            for bigram in included_bigrams:
                 exists = bigram.split(" ") in [future_tokens[i:i+2] for i in range(len(future_tokens) - 1)]
                 if exists:
                     future_bigrams.append(self.target_vocab.lookup_token(bigram))
@@ -153,6 +169,8 @@ class NMTVectorizer(object):
         #y_indices = indices + [self.target_vocab.end_seq_index]
 
         y_indices = [[self.target_vocab.begin_seq_index]] + all_indices
+        #end = time.time()
+        #print("Prepare target indices time: ", (end - start))
 
         return x_indices, y_indices
         

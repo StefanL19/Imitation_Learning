@@ -4,7 +4,7 @@ from collections import Counter
 import json
 import re
 import string
-
+import time
 import numpy as np
 import pandas as pd
 import torch
@@ -107,9 +107,9 @@ def normalize_sizes(y_pred, y_true):
     return y_pred, y_true
 
 def compute_accuracy(y_pred, y_true, mask_index):
-    print(y_pred.shape)
-    #y_pred, y_true = normalize_sizes(y_pred, y_true)
-    print(y_true.shape)
+    # print(y_pred.shape)
+    # #y_pred, y_true = normalize_sizes(y_pred, y_true)
+    # print(y_true.shape)
     _, y_pred_indices = y_pred.max(dim=-1)
     _, y_true_indices = y_true.max(dim=-1)
 
@@ -257,8 +257,15 @@ try:
             # step 3. compute the loss
             loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index)
 
+
+            #start = time.time()
+
             # step 4. use loss to produce gradients
             loss.backward()
+
+            # end = time.time()
+            # print("Loss backwards time: ", (end - start))
+
 
             # step 5. use optimizer to take gradient step
             optimizer.step()
