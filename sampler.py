@@ -6,7 +6,7 @@ from slot_aligner import SlotAligner
 import torch
 from nltk.translate import bleu_score
 from beam_search_allennlp import BeamSearch  
-
+from sparsemax import Sparsemax
 
 class NMTSampler:
     def __init__(self, vectorizer, model, use_reranker, beam_width=3):
@@ -20,6 +20,7 @@ class NMTSampler:
         self._beam_search = BeamSearch(
             vectorizer.target_vocab.end_seq_index, max_steps=45, beam_size=self.beam_width
         )
+        self.simplex_projection = Sparsemax(dim=-1)
 
     def get_prediction_slice(self, idx):
         preds_slice = self._last_batch["unnormalized_predictions"].select(1, idx)
@@ -30,7 +31,7 @@ class NMTSampler:
 
         preds = self.get_prediction_slice(idx)
 
-        class_log_probabilities = torch.nn.functional.softmax(preds, dim=1)
+        class_log_probabilities = self.simplex_projection(preds) #torch.nn.functional.softmax(preds, dim=1)
 
         idx = idx+1
         repetitions = int(desired_shape/class_log_probabilities.shape[0])

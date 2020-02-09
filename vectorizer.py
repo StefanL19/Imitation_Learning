@@ -164,6 +164,10 @@ class NMTVectorizer(object):
             for token in target_tokens:
                 target_vocab.add_token(token)
             
+        target_vocab.augment_with_ngrams(bitext_df, 10)
+        
+        print(str(target_vocab))
+
         return cls(source_vocab, target_vocab, max_source_length, max_target_length)
 
     @classmethod

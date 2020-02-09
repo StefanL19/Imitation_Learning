@@ -1,3 +1,4 @@
+from utils_ngram import NGramExtractor
 
 class Vocabulary(object):
     """Class to process text and extract vocabulary for mapping"""
@@ -73,6 +74,25 @@ class Vocabulary(object):
         if index not in self._idx_to_token:
             raise KeyError("the index (%d) is not in the Vocabulary" % index)
         return self._idx_to_token[index]
+
+    def augment_with_ngrams(self, df_path, top_n, include_trigrams=False):
+        """Augments the dictionary with the top_n n_grams for each one of the headwords
+
+            Args:
+                df_path (str): the path to the dataframe from where the target utterances should be extracted
+                top_n (int): top n n_grams to select - ordering is performed according to frequency
+                include_trigrams (boolean): should trigrams be included
+        """
+
+        extractor = NGramExtractor(df_path, top_n)
+        keys = list(self._token_to_idx.keys())
+        for token in keys:
+            top_bigrams = extractor.get_top_bigrams(token)
+            for bigram in top_bigrams:
+                self.add_token(bigram)
+
+
+
 
     def __str__(self):
         return "<Vocabulary(size=%d)>" % len(self)
