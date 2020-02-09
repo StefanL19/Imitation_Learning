@@ -129,7 +129,7 @@ def sequence_loss(y_pred, y_true, mask_index):
     #criterion = fy_losses.SparsemaxLoss()
 
     loss = F.mse_loss(y_pred.double(), y_true.double())
-    print(loss)
+
     return loss
 
 args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
