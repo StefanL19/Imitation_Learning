@@ -193,6 +193,7 @@ class NMTSampler:
 
     def get_ith_item(self, index, return_string=True):
         sampled_sentence, best_score_overgenerated, best_score_undergenerated = self._get_sampled_sentence(index, return_string=return_string)
+        
         gt_mrs = self._get_gt_mrs(index)
         ref_gt = self._get_gt_ref(index)
         

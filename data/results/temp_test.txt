@@ -1,0 +1,150 @@
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+
+name[Alimentum], area[city centre], familyFriendly[no]
+------------------------------------
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+x-name it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||1.0|||0||||0||||2
+pub it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+near it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+a it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+has it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<MASK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+<UNK> it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it it|||0.75|||0||||0||||3
+
+
+

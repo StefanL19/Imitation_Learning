@@ -106,7 +106,7 @@ def normalize_sizes(y_pred, y_true):
         y_true = y_true.contiguous().view(-1)
     return y_pred, y_true
 
-def compute_accuracy(y_pred, y_true, mask_index):
+def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     # print(y_pred.shape)
     # #y_pred, y_true = normalize_sizes(y_pred, y_true)
     # print(y_true.shape)
@@ -115,20 +115,37 @@ def compute_accuracy(y_pred, y_true, mask_index):
 
     correct_indices = torch.eq(y_pred_indices, y_true_indices).float()
     valid_indices = torch.ne(y_true_indices, mask_index).float()
-    
-    n_correct = (correct_indices * valid_indices).sum().item()
+    correct_valid = correct_indices * valid_indices
+
+    # Check if logging should be displayed
+    if batch_index % 100 == 0:
+      # Show the predicted indices for the 10-th sample in the batch
+      print(y_pred_indices[10])
+      # Show the correct indices of the 15-th sample in the batch
+      print(y_pred_indices[15])
+      print("The number of all correct indices is: ", correct_indices.sum())
+      print("The number of correct indices whrn mask is removed: ", correct_valid.sum())
+
+    n_correct = correct_valid.sum().item()
     n_valid = valid_indices.sum().item()
 
     return n_correct / n_valid * 100
 
-def sequence_loss(y_pred, y_true, mask_index):
+def sequence_loss(y_pred, y_true, mask_index, batch_index):
     #y_pred, y_true = normalize_sizes(y_pred, y_true)
+    _, y_true_indices = y_true.max(dim=-1)
+    valid_indices = torch.ne(y_true_indices, mask_index).float()
+
+    valid_indices = valid_indices.unsqueeze(2)
+    valid_indices = valid_indices.repeat(1, 1, 12948)
+    tensor_pred = y_pred*valid_indices
+    tensor_target = y_true*valid_indices
 
     # Mask the zero index in the predictions
     #return F.cross_entropy(y_pred, y_true, ignore_index=mask_index)
     #criterion = fy_losses.SparsemaxLoss()
 
-    loss = F.mse_loss(y_pred.double(), y_true.double())
+    loss = F.mse_loss(tensor_pred.double(), tensor_target.double())
 
     return loss
 
@@ -255,7 +272,7 @@ try:
                            sample_probability=sample_probability)
 
             # step 3. compute the loss
-            loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index)
+            loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index, batch_index)
 
 
             #start = time.time()
@@ -273,7 +290,7 @@ try:
             # step 6. compute the running loss and the running accuracy
             running_loss += (loss.item() - running_loss) / (batch_index + 1)
 
-            acc_t = compute_accuracy(y_pred, batch_dict['y_target'], mask_index)
+            acc_t = compute_accuracy(y_pred, batch_dict['y_target'], mask_index, batch_index)
             running_acc += (acc_t - running_acc) / (batch_index + 1)
 
              # step 7. update bar
@@ -306,12 +323,12 @@ try:
                            sample_probability=sample_probability)
 
             # step 3. compute the loss
-            loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index)
+            loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index, batch_index)
 
             # compute the running loss and accuracy
             running_loss += (loss.item() - running_loss) / (batch_index + 1)
             
-            acc_t = compute_accuracy(y_pred, batch_dict['y_target'], mask_index)
+            acc_t = compute_accuracy(y_pred, batch_dict['y_target'], mask_index, batch_index)
             running_acc += (acc_t - running_acc) / (batch_index + 1)
             
             # Update bar
