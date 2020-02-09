@@ -70,6 +70,10 @@ class NMTVectorizer(object):
         if vector_length < 0:
             vector_length = len(indices)
 
+        # Same workaround
+        if len(indices) > vector_length:
+            indices = indices[:vector_length]
+
         vocabulary_length = len(self.target_vocab)
 
         # start = time.time()
