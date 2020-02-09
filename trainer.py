@@ -18,6 +18,7 @@ from encoders import NMTEncoder
 from decoders import NMTDecoder
 from data_loader import NMTDataset, generate_nmt_batches
 from models import NMTModel
+import fy_losses
 
 def set_seed_everywhere(seed, cuda):
     np.random.seed(seed)
@@ -120,7 +121,11 @@ def compute_accuracy(y_pred, y_true, mask_index):
 
 def sequence_loss(y_pred, y_true, mask_index):
     y_pred, y_true = normalize_sizes(y_pred, y_true)
+
+    # Mask the zero index in the predictions
     return F.cross_entropy(y_pred, y_true, ignore_index=mask_index)
+    # criterion = fy_losses.SparsemaxLoss()
+    # return criterion(y_pred, y_true)
 
 args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
                  vectorizer_file="test.json",

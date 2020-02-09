@@ -101,6 +101,7 @@ class NMTDecoder(nn.Module):
         self.training_mode = training_mode
         self.attention_mechanism = attention_mechanism
         self.num_embeddings = num_embeddings
+        self.simplex_projection = Sparsemax(dim=-1)
 
         print("The training mode is: ", training_mode)
     
@@ -213,6 +214,9 @@ class NMTDecoder(nn.Module):
 
             dot_similarity = res.transpose(0, 1)
 
+            # We will be using Sparsemax Loss, so we can do the sparsemax activation earlier
+            dot_similarity = self.simplex_projection(dot_similarity)
+
             # # Get the indeces of all words included in the target vocab
             # # all_target_vocab_indices = []
             # # for i in range(0, batch_size):
@@ -237,7 +241,7 @@ class NMTDecoder(nn.Module):
 
             if use_sample:
                 #p_y_t_index = F.softmax(score_for_y_t_index * self._sampling_temperature, dim=1)
-                p_y_t_index = F.softmax(dot_similarity, dim=1)
+                p_y_t_index = dot_similarity #F.softmax(dot_similarity, dim=1)
 
                 if self.training_mode:
                     #print("It is in training mode")
