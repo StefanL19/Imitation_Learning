@@ -107,12 +107,14 @@ def normalize_sizes(y_pred, y_true):
     return y_pred, y_true
 
 def compute_accuracy(y_pred, y_true, mask_index):
-    y_pred, y_true = normalize_sizes(y_pred, y_true)
+    print(y_pred.shape)
+    #y_pred, y_true = normalize_sizes(y_pred, y_true)
+    print(y_true.shape)
+    _, y_pred_indices = y_pred.max(dim=-1)
+    _, y_true_indices = y_true.max(dim=-1)
 
-    _, y_pred_indices = y_pred.max(dim=1)
-    
-    correct_indices = torch.eq(y_pred_indices, y_true).float()
-    valid_indices = torch.ne(y_true, mask_index).float()
+    correct_indices = torch.eq(y_pred_indices, y_true_indices).float()
+    valid_indices = torch.ne(y_true_indices, mask_index).float()
     
     n_correct = (correct_indices * valid_indices).sum().item()
     n_valid = valid_indices.sum().item()
@@ -120,12 +122,15 @@ def compute_accuracy(y_pred, y_true, mask_index):
     return n_correct / n_valid * 100
 
 def sequence_loss(y_pred, y_true, mask_index):
-    y_pred, y_true = normalize_sizes(y_pred, y_true)
+    #y_pred, y_true = normalize_sizes(y_pred, y_true)
 
     # Mask the zero index in the predictions
     #return F.cross_entropy(y_pred, y_true, ignore_index=mask_index)
-    criterion = fy_losses.SparsemaxLoss()
-    return criterion(y_pred, y_true)
+    #criterion = fy_losses.SparsemaxLoss()
+
+    loss = F.mse_loss(y_pred.double(), y_true.double())
+    print(loss)
+    return loss
 
 args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
                  vectorizer_file="test.json",

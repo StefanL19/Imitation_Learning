@@ -16,6 +16,12 @@ from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm_notebook
 from vocabulary import SequenceVocabulary
 
+def find_pair(seq, a, b):
+    i = 1
+    while i < len(seq):
+        if seq[i] == b and seq[i - 1] == a: return i - 1
+        i += 2 - (seq[i] == a)
+
 class NMTVectorizer(object):
     """ The Vectorizer which coordinates the Vocabularies and puts them to use"""        
     def __init__(self, source_vocab, target_vocab, max_source_length, max_target_length):
@@ -58,7 +64,43 @@ class NMTVectorizer(object):
         vector[len(indices):] = mask_index
 
         return vector
-    
+
+    def _vectorize_target(self, indices, vector_length, mask_index):
+        if vector_length < 0:
+            vector_length = len(indices)
+
+        vocabulary_length = len(self.target_vocab)
+
+        # The target vocabulary has shape: NUMBER_WORDS x VOCAB_SIZE
+        # Those are the target vectors for each one of the words in the sentence
+        vector = np.zeros((vector_length, vocabulary_length), dtype=np.double)
+        
+        # Iterate over the indices
+        for word_idx, row in enumerate(indices):
+            # This is the index target word which should be generated
+            target_word_idx = row[0]
+
+            # It gets 0.5 of the total probability
+            vector[word_idx][target_word_idx] = 0.5
+
+            # Calculate how to distribute the rest probabilities amongst the bigrams
+            # All future n_grams
+            future_ngrams_len = len(row[1:])
+
+            if future_ngrams_len == 0:
+                future_ngrams_len = 1
+            # Distribute the rest probability mass amognst the future ngrams that may appear
+            future_ngram_prob = 0.5*(1./future_ngrams_len)
+
+            for idx_1, ngram_idx in enumerate(row[1:]):
+                vector[word_idx][ngram_idx] = future_ngram_prob
+
+        # Fill with the rest with the mask index
+        for word_idx in range(len(indices), vector_length):
+            vector[word_idx][mask_index] = 1. 
+
+        return vector
+
     def _get_source_indices(self, text):
         """Return the vectorized source text
         
@@ -85,9 +127,33 @@ class NMTVectorizer(object):
 
         # TODO Some changes should be made here, so the whole thing operates on Bigrams and Trigrams
         # Several target indices should be returned for each one of the words
+        all_target_tokens = text.split(" ")
+        all_indices = []
+        for idx, token in enumerate(all_target_tokens):
+            # print(token)
+            # print("------------------------------")
+            future_tokens = all_target_tokens[idx:]
+            future_bigrams = []
+            for bigram in self.target_vocab.bigrams:
+                exists = bigram.split(" ") in [future_tokens[i:i+2] for i in range(len(future_tokens) - 1)]
+                if exists:
+                    future_bigrams.append(self.target_vocab.lookup_token(bigram))
+
+            all_indices.append([self.target_vocab.lookup_token(token)]+future_bigrams)
+                    # print(bigram)
+                    # print(self.target_vocab.lookup_token(bigram))
+            # print("##############################")
+                # if bigram in " ".join(all_target_tokens[idx:]):
+                #     print(bigram)
+
         indices = [self.target_vocab.lookup_token(token) for token in text.split(" ")]
         x_indices = [self.target_vocab.begin_seq_index] + indices
-        y_indices = indices + [self.target_vocab.end_seq_index]
+
+        # The target indices will be changed because n grams are included
+        #y_indices = indices + [self.target_vocab.end_seq_index]
+
+        y_indices = [[self.target_vocab.begin_seq_index]] + all_indices
+
         return x_indices, y_indices
         
     def vectorize(self, source_text, target_text, use_dataset_max_lengths=True):
@@ -123,9 +189,14 @@ class NMTVectorizer(object):
         target_x_vector = self._vectorize(target_x_indices,
                                         vector_length=target_vector_length,
                                         mask_index=self.target_vocab.mask_index)
-        target_y_vector = self._vectorize(target_y_indices,
+
+        target_y_vector = self._vectorize_target(target_y_indices,
                                         vector_length=target_vector_length,
                                         mask_index=self.target_vocab.mask_index)
+
+        # target_y_vector = self._vectorize(target_y_indices,
+        #                                 vector_length=target_vector_length,
+        #                                 mask_index=self.target_vocab.mask_index)
         return {"source_vector": source_vector, 
                 "target_x_vector": target_x_vector, 
                 "target_y_vector": target_y_vector, 
@@ -165,7 +236,7 @@ class NMTVectorizer(object):
                 target_vocab.add_token(token)
             
         target_vocab.augment_with_ngrams(bitext_df, 10)
-        
+
         print(str(target_vocab))
 
         return cls(source_vocab, target_vocab, max_source_length, max_target_length)

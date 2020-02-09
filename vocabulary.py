@@ -16,6 +16,8 @@ class Vocabulary(object):
         self._idx_to_token = {idx: token 
                               for token, idx in self._token_to_idx.items()}
         
+        self.bigrams = []
+
     def to_serializable(self):
         """ returns a dictionary that can be serialized """
         return {'token_to_idx': self._token_to_idx}
@@ -89,9 +91,8 @@ class Vocabulary(object):
         for token in keys:
             top_bigrams = extractor.get_top_bigrams(token)
             for bigram in top_bigrams:
+                self.bigrams.append(bigram)
                 self.add_token(bigram)
-
-
 
 
     def __str__(self):
