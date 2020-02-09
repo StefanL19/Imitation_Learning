@@ -121,8 +121,13 @@ def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     if batch_index % 100 == 0:
       # Show the predicted indices for the 10-th sample in the batch
       print(y_pred_indices[10])
+      print("----------------")
+      print(y_true_indices[10])
       # Show the correct indices of the 15-th sample in the batch
       print(y_pred_indices[15])
+      print("----------------")
+      print(y_true_indices[15])
+
       print("The number of all correct indices is: ", correct_indices.sum())
       print("The number of correct indices whrn mask is removed: ", correct_valid.sum())
 
