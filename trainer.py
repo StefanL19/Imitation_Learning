@@ -112,7 +112,7 @@ def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     # print(y_true.shape)
 
     # Consider only the unigram probs when measuring the accuracy
-    y_pred_indices = y_pred_indices[:][:][:3000]
+    y_pred = y_pred[:][:][:3000]
 
     _, y_pred_indices = y_pred.max(dim=-1)
     _, y_true_indices = y_true.max(dim=-1)
