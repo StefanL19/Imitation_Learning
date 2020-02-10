@@ -256,7 +256,11 @@ with open("training_monitor.txt", "a") as f:
 
 try: 
     for epoch_index in range(args.num_epochs):
-        sample_probability = (20 + epoch_index) / 100
+        sample_probability = (40 + epoch_index*5) / 100
+        
+        if sample_probability > 1.:
+          sample_probability = 1.
+
         train_state['epoch_index'] = epoch_index
 
 
