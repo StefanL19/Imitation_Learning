@@ -42,10 +42,12 @@ class NMTSampler:
     def apply_to_batch(self, batch_dict):
         self._last_batch = batch_dict
 
+        print(batch_dict["x_source"])
+
         y_pred, _ = self.model(x_source=batch_dict['x_source'], 
                             x_source_lengths=batch_dict['x_source_length'], 
                             target_sequence=batch_dict['x_target'],
-                            sample_probability=1.0)
+                            sample_probability=1.)
 
         self._last_batch["unnormalized_predictions"] = y_pred
 
@@ -103,8 +105,10 @@ class NMTSampler:
         vocab = self.vectorizer.target_vocab
 
         # Convert the scores for the words to softmax probabilities
-        prob_res = torch.nn.functional.softmax(self._last_batch['y_pred'], dim=2)
+        prob_res = self.simplex_projection(self._last_batch['y_pred'])
+
         sentece_probs = prob_res[index].cpu().detach().numpy()
+        print(sentece_probs[5][:200])
 
         bs_res = self._get_beam_seach_results(index)
 
@@ -193,7 +197,7 @@ class NMTSampler:
 
     def get_ith_item(self, index, return_string=True):
         sampled_sentence, best_score_overgenerated, best_score_undergenerated = self._get_sampled_sentence(index, return_string=return_string)
-        
+
         gt_mrs = self._get_gt_mrs(index)
         ref_gt = self._get_gt_ref(index)
         

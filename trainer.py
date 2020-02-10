@@ -325,7 +325,7 @@ try:
             y_pred, _ = model(batch_dict['x_source'], 
                            batch_dict['x_source_length'], 
                            batch_dict['x_target'],
-                           sample_probability=sample_probability)
+                           sample_probability=1.)
 
             # step 3. compute the loss
             loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index, batch_index)
