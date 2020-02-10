@@ -113,6 +113,9 @@ def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     _, y_pred_indices = y_pred.max(dim=-1)
     _, y_true_indices = y_true.max(dim=-1)
 
+    y_pred_indices = y_pred_indices[:][:3000]
+    y_true_indices = y_true_indices[:][:3000]
+    
     correct_indices = torch.eq(y_pred_indices, y_true_indices).float()
     valid_indices = torch.ne(y_true_indices, mask_index).float()
     correct_valid = correct_indices * valid_indices

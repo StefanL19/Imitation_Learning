@@ -42,8 +42,6 @@ class NMTSampler:
     def apply_to_batch(self, batch_dict):
         self._last_batch = batch_dict
 
-        print(batch_dict["x_source"])
-
         y_pred, _ = self.model(x_source=batch_dict['x_source'], 
                             x_source_lengths=batch_dict['x_source_length'], 
                             target_sequence=batch_dict['x_target'],
