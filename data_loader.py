@@ -113,10 +113,11 @@ class NMTDataset(Dataset):
         row = self._target_df.iloc[index]
 
         vector_dict = self._vectorizer.vectorize(row.source_language, row.target_language)
-        
+
         return {"x_source": vector_dict["source_vector"], 
                 "x_target": vector_dict["target_x_vector"],
-                "y_target": vector_dict["target_y_vector"], 
+                "target_unigrams_vector": vector_dict["target_unigrams_vector"], 
+                "target_bigrams_vector": vector_dict["target_bigrams_vector"],
                 "x_source_length": vector_dict["source_length"],
                 "inp_gt":row.inp_gt,
                  "ref_gt":row.ref_gt}

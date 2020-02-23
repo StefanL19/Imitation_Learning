@@ -112,7 +112,7 @@ def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     # print(y_true.shape)
 
     # Consider only the unigram probs when measuring the accuracy
-    y_pred = y_pred[:, :, :3000]
+    #y_pred = y_pred[:, :, :3000]
 
     _, y_pred_indices = y_pred.max(dim=-1)
     _, y_true_indices = y_true.max(dim=-1)
@@ -142,20 +142,21 @@ def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     return n_correct / n_valid * 100
 
 def sequence_loss(y_pred, y_true, mask_index, batch_index):
-    #y_pred, y_true = normalize_sizes(y_pred, y_true)
-    _, y_true_indices = y_true.max(dim=-1)
-    valid_indices = torch.ne(y_true_indices, mask_index).float()
+    _, y_true = y_true.max(dim=-1)
 
-    valid_indices = valid_indices.unsqueeze(2)
-    valid_indices = valid_indices.repeat(1, 1, 12948)
-    tensor_pred = y_pred*valid_indices
-    tensor_target = y_true*valid_indices
+    y_pred, y_true = normalize_sizes(y_pred, y_true)
+    #valid_indices = torch.ne(y_true_indices, mask_index).float()
+
+    #valid_indices = valid_indices.unsqueeze(2)
+    #valid_indices = valid_indices.repeat(1, 1, 2894)
+    #tensor_pred = y_pred*valid_indices
+    #tensor_target = y_true*valid_indices
 
     # Mask the zero index in the predictions
     #return F.cross_entropy(y_pred, y_true, ignore_index=mask_index)
     #criterion = fy_losses.SparsemaxLoss()
-
-    loss = F.mse_loss(tensor_pred.double(), tensor_target.double())
+    y_pred, y_true = normalize_sizes(y_pred, y_true)
+    loss = F.cross_entropy(y_pred, y_true, ignore_index=mask_index) #F.mse_loss(tensor_pred.double(), tensor_target.double())
 
     return loss
 
@@ -219,10 +220,14 @@ else:
 
 vectorizer = dataset.get_vectorizer()
 
+target_bigrams_size = len(vectorizer.target_vocab.bigrams)
+target_unigrams_size = len(vectorizer.target_vocab) - target_bigrams_size
+
 print("The max target length of the vectorizer is: ", vectorizer.max_target_length)
 model = NMTModel(source_vocab_size=len(vectorizer.source_vocab), 
                  source_embedding_size=args.source_embedding_size, 
-                 target_vocab_size=len(vectorizer.target_vocab),
+                 target_unigrams_size=target_unigrams_size,
+                 target_bigrams_size=target_bigrams_size,
                  target_embedding_size=args.target_embedding_size, 
                  encoding_size=args.encoding_size,
                  target_bos_index=vectorizer.target_vocab.begin_seq_index,
@@ -260,7 +265,7 @@ with open("training_monitor.txt", "a") as f:
 
 try: 
     for epoch_index in range(args.num_epochs):
-        sample_probability = (40 + epoch_index*5) / 100
+        sample_probability = (20 + epoch_index) / 100
         
         if sample_probability > 1.:
           sample_probability = 1.
@@ -284,14 +289,16 @@ try:
             optimizer.zero_grad()
 
             # step 2. compute the output
-            y_pred, stacked_attentions = model(batch_dict['x_source'], 
+            y_pred, y_pred_bigrams, stacked_attentions = model(batch_dict['x_source'], 
                            batch_dict['x_source_length'], 
                            batch_dict['x_target'],
                            sample_probability=sample_probability)
 
-            # step 3. compute the loss
-            loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index, batch_index)
+            print(y_pred_bigrams.shape)
+            print(batch_dict['target_bigrams_vector'].shape)
 
+            # step 3. compute the loss
+            loss = sequence_loss(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
 
             #start = time.time()
 
@@ -308,7 +315,7 @@ try:
             # step 6. compute the running loss and the running accuracy
             running_loss += (loss.item() - running_loss) / (batch_index + 1)
 
-            acc_t = compute_accuracy(y_pred, batch_dict['y_target'], mask_index, batch_index)
+            acc_t = compute_accuracy(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
             running_acc += (acc_t - running_acc) / (batch_index + 1)
 
              # step 7. update bar
@@ -341,12 +348,12 @@ try:
                            sample_probability=1.)
 
             # step 3. compute the loss
-            loss = sequence_loss(y_pred, batch_dict['y_target'], mask_index, batch_index)
+            loss = sequence_loss(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
 
             # compute the running loss and accuracy
             running_loss += (loss.item() - running_loss) / (batch_index + 1)
             
-            acc_t = compute_accuracy(y_pred, batch_dict['y_target'], mask_index, batch_index)
+            acc_t = compute_accuracy(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
             running_acc += (acc_t - running_acc) / (batch_index + 1)
             
             # Update bar

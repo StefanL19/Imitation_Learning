@@ -112,6 +112,7 @@ class NMTVectorizer(object):
         return vector
 
     def _vectorize_target_multitask(self, indices, vector_length, mask_index):
+
         if vector_length < 0:
             vector_length = len(indices)
 
@@ -121,14 +122,16 @@ class NMTVectorizer(object):
 
         vocabulary_length = len(self.target_vocab)
 
+        index_first_bigram = self.target_vocab.lookup_token(self.target_vocab.bigrams[0])
+
         # The target vocabulary has shape: NUMBER_WORDS x VOCAB_SIZE
         # Those are the target vectors for each one of the words in the sentence
 
         # One vector for unigrams
-        vector_unigrams = np.zeros((vector_length, vocabulary_length), dtype=np.double)
+        vector_unigrams = np.zeros((vector_length, index_first_bigram), dtype=np.double)
 
         # One vector for bigrams that will contain the futire bigrams at each position
-        vector_bigrams = np.zeros((vector_length, vocabulary_length), dtype=np.double)
+        vector_bigrams = np.zeros((vector_length, vocabulary_length-index_first_bigram), dtype=np.double)
 
         # Iterate over the indices
         for word_idx, row in enumerate(indices):
@@ -148,7 +151,7 @@ class NMTVectorizer(object):
             future_ngram_prob = 1./future_ngrams_len
 
             for idx_1, ngram_idx in enumerate(row[1:]):
-                vector_bigrams[word_idx][ngram_idx] = future_ngram_prob
+                vector_bigrams[word_idx][ngram_idx-index_first_bigram] = future_ngram_prob
 
         # Fill with the rest with the mask index
         for word_idx in range(len(indices), vector_length):
@@ -156,9 +159,6 @@ class NMTVectorizer(object):
             vector_bigrams[word_idx][mask_index] = 1.
         
         return vector_unigrams, vector_bigrams
-
-
-
         
     def _get_source_indices(self, text):
         """Return the vectorized source text
@@ -262,21 +262,23 @@ class NMTVectorizer(object):
                                         vector_length=target_vector_length,
                                         mask_index=self.target_vocab.mask_index)
 
-        target_y_vector = self._vectorize_target(target_y_indices,
-                                        vector_length=target_vector_length,
-                                        mask_index=self.target_vocab.mask_index)
+        # target_y_vector = self._vectorize_target(target_y_indices,
+        #                                 vector_length=target_vector_length,
+        #                                 mask_index=self.target_vocab.mask_index)
 
         # Just a test for now
         target_unigrams, target_bigrams = self._vectorize_target_multitask(target_y_indices,
                                         vector_length=target_vector_length,
                                         mask_index=self.target_vocab.mask_index)
 
+
         # target_y_vector = self._vectorize(target_y_indices,
         #                                 vector_length=target_vector_length,
         #                                 mask_index=self.target_vocab.mask_index)
         return {"source_vector": source_vector, 
                 "target_x_vector": target_x_vector, 
-                "target_y_vector": target_y_vector, 
+                "target_unigrams_vector": target_unigrams,
+                "target_bigrams_vector": target_bigrams,
                 "source_length": len(source_indices)}
         
     @classmethod

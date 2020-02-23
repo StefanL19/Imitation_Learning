@@ -20,7 +20,7 @@ import attention_mechanisms
 class NMTModel(nn.Module):
     """ The Neural Machine Translation Model """
     def __init__(self, source_vocab_size, source_embedding_size, 
-                 target_vocab_size, target_embedding_size, encoding_size, 
+                 target_unigrams_size, target_bigrams_size, target_embedding_size, encoding_size, 
                  target_bos_index, is_training, attention_mode="multiplicative"):
         """
         Args:
@@ -47,7 +47,8 @@ class NMTModel(nn.Module):
           print("Using Multiplicative Attention Mechanism")
           attention = attention_mechanisms.Multiplicative_Attention()
 
-        self.decoder = NMTDecoder(num_embeddings=target_vocab_size, 
+        self.decoder = NMTDecoder(num_unigram_embeddings=target_unigrams_size,
+                                  num_bigram_embeddings=target_bigrams_size,
                                   embedding_size=target_embedding_size, 
                                   rnn_hidden_size=decoding_size,
                                   bos_index=target_bos_index,
@@ -68,8 +69,8 @@ class NMTModel(nn.Module):
             decoded_states (torch.Tensor): prediction vectors at each output step
         """
         encoder_state, final_hidden_states = self.encoder(x_source, x_source_lengths)
-        decoded_states, stacked_attentions = self.decoder(encoder_state=encoder_state, 
+        decoded_states, decoded_bigrams, stacked_attentions = self.decoder(encoder_state=encoder_state, 
                                       initial_hidden_state=final_hidden_states, 
                                       target_sequence=target_sequence, 
                                       sample_probability=sample_probability)
-        return decoded_states, stacked_attentions
+        return decoded_states, decoded_bigrams, stacked_attentions
