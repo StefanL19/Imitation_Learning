@@ -159,6 +159,9 @@ def sequence_loss(y_pred, y_true, mask_index, batch_index):
 
     return loss
 
+def multi_task_loss(y_pred, y_true, mask_idex, batch_idex):
+    pass
+
 args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
                  vectorizer_file="test.json",
                  model_state_file="test.pth",
@@ -215,6 +218,7 @@ else:
     dataset.save_vectorizer(args.vectorizer_file)
 
 vectorizer = dataset.get_vectorizer()
+
 print("The max target length of the vectorizer is: ", vectorizer.max_target_length)
 model = NMTModel(source_vocab_size=len(vectorizer.source_vocab), 
                  source_embedding_size=args.source_embedding_size, 

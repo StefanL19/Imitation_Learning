@@ -111,6 +111,55 @@ class NMTVectorizer(object):
 
         return vector
 
+    def _vectorize_target_multitask(self, indices, vector_length, mask_index):
+        if vector_length < 0:
+            vector_length = len(indices)
+
+        # Same workaround
+        if len(indices) > vector_length:
+            indices = indices[:vector_length]
+
+        vocabulary_length = len(self.target_vocab)
+
+        # The target vocabulary has shape: NUMBER_WORDS x VOCAB_SIZE
+        # Those are the target vectors for each one of the words in the sentence
+
+        # One vector for unigrams
+        vector_unigrams = np.zeros((vector_length, vocabulary_length), dtype=np.double)
+
+        # One vector for bigrams that will contain the futire bigrams at each position
+        vector_bigrams = np.zeros((vector_length, vocabulary_length), dtype=np.double)
+
+        # Iterate over the indices
+        for word_idx, row in enumerate(indices):
+            # This is the index of the target unigram which should be generated
+            target_word_idx = row[0]
+            vector_unigrams[word_idx][target_word_idx] = 1.
+
+            # Calculate how to distribute the rest probs amongst the bigrams
+
+            # Get all future bigrams
+            future_ngrams_len = len(row[1:])
+
+            if future_ngrams_len == 0:
+                future_ngrams_len = 1
+            
+            # Distribute the probability mass amongst the future ngrams that may appear
+            future_ngram_prob = 1./future_ngrams_len
+
+            for idx_1, ngram_idx in enumerate(row[1:]):
+                vector_bigrams[word_idx][ngram_idx] = future_ngram_prob
+
+        # Fill with the rest with the mask index
+        for word_idx in range(len(indices), vector_length):
+            vector_unigrams[word_idx][mask_index] = 1.
+            vector_bigrams[word_idx][mask_index] = 1.
+        
+        return vector_unigrams, vector_bigrams
+
+
+
+        
     def _get_source_indices(self, text):
         """Return the vectorized source text
         
@@ -177,7 +226,8 @@ class NMTVectorizer(object):
         #print("Prepare target indices time: ", (end - start))
 
         return x_indices, y_indices
-        
+
+
     def vectorize(self, source_text, target_text, use_dataset_max_lengths=True):
         """Return the vectorized source and target text
         
@@ -213,6 +263,11 @@ class NMTVectorizer(object):
                                         mask_index=self.target_vocab.mask_index)
 
         target_y_vector = self._vectorize_target(target_y_indices,
+                                        vector_length=target_vector_length,
+                                        mask_index=self.target_vocab.mask_index)
+
+        # Just a test for now
+        target_unigrams, target_bigrams = self._vectorize_target_multitask(target_y_indices,
                                         vector_length=target_vector_length,
                                         mask_index=self.target_vocab.mask_index)
 

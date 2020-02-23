@@ -97,3 +97,32 @@ Bahdanau Attention, Softmax
 Bahdanau Attention, Softmax
 Bahdanau Attention, Softmax
 Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Training Loss: 4.643584096746943e-06
+Validation Loss: 9.468962544653937e-06 Validation Accuracy: 4.632527680328468
+----------------------
+Training Loss: 3.7105281512735345e-06
+Validation Loss: 8.93312938676295e-06 Validation Accuracy: 7.524772892160802
+----------------------
+Training Loss: 3.7753020544250235e-06
+Validation Loss: 8.660183005214408e-06 Validation Accuracy: 8.896802625733034
+----------------------
+Training Loss: 3.928867323238795e-06
+Validation Loss: 8.413575216970083e-06 Validation Accuracy: 9.693298175736013
+----------------------
+Training Loss: 4.075029266898178e-06
+Validation Loss: 8.232449886162986e-06 Validation Accuracy: 10.787597607364388
+----------------------
+Training Loss: 4.253604528190233e-06
+Validation Loss: 8.025684446334694e-06 Validation Accuracy: 12.093289174572522
+----------------------
+Training Loss: 4.46307550793209e-06
+Validation Loss: 8.058594622988463e-06 Validation Accuracy: 11.27516203079857
+----------------------
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
