@@ -18,11 +18,11 @@ def test():
 
 	dataset = NMTDataset.load_dataset_and_make_vectorizer("data/inp_and_gt_name_near_food_no_inform.csv")
 	vect = dataset.get_vectorizer()
-
-	# print(vect.target_vocab.lookup_index(3))
+	# print(vect.target_vocab.lookup_token(" "))
+	print(vect.target_vocab.lookup_index(0))
 	# print(vect.target_vocab.lookup_index(2949))
-	for i in [ 2,   55,   93,   93,   30,   10,  178,   21,   77,   14,   39,   81, 132,   43,   13,   18,]:
-		print(vect.target_vocab.lookup_index(i))
+	# for i in [ 2,   55,   93,   93,   30,   10,  178,   21,   77,   14,   39,   81, 132,   43,   13,   18,]:
+	# 	print(vect.target_vocab.lookup_index(i))
 	# sample = "x-name is a coffee shop along the river near x-near . the prices are quite high while the customer ratings are quite low . it is not recommended to take children there . "
 	# vect._get_target_indices(sample)
 	# batch_generator = generate_nmt_batches(dataset, 

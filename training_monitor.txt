@@ -157,3 +157,64 @@ Bahdanau Attention, Softmax
 Bahdanau Attention, Softmax
 Bahdanau Attention, Softmax
 Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Training Loss: 1.8774683540045147
+Validation Loss: 9.962787263348545 Validation Accuracy: 9.856473847675295
+----------------------
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Training Loss: 1.8774683540045147
+Validation Loss: 9.962787263348545 Validation Accuracy: 9.856473847675295
+----------------------
+Training Loss: 1.6913790362969368
+Validation Loss: 9.875937987050033 Validation Accuracy: 9.45398809836843
+----------------------
+Training Loss: 1.6764144670576897
+Validation Loss: 9.595871852705395 Validation Accuracy: 9.294100751220329
+----------------------
+Training Loss: 1.6853852039355863
+Validation Loss: 9.564247493484213 Validation Accuracy: 8.799016937566874
+----------------------
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Bahdanau Attention, Softmax
+Training Loss: 0.8092064115608539
+Validation Loss: 7.680844333667281 Validation Accuracy: 11.835238241004603
+----------------------
+Training Loss: 0.49314893593419445
+Validation Loss: 7.690661473473066 Validation Accuracy: 12.386869307891866
+----------------------
+Training Loss: 0.4651508972914106
+Validation Loss: 7.578496801899905 Validation Accuracy: 12.050795323476478
+----------------------
+Training Loss: 0.46487211109303206
+Validation Loss: 7.519429298773176 Validation Accuracy: 11.77051573847689
+----------------------

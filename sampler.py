@@ -42,7 +42,7 @@ class NMTSampler:
     def apply_to_batch(self, batch_dict):
         self._last_batch = batch_dict
 
-        y_pred, _ = self.model(x_source=batch_dict['x_source'], 
+        y_pred, y_pred_bigrams, _ = self.model(x_source=batch_dict['x_source'], 
                             x_source_lengths=batch_dict['x_source_length'], 
                             target_sequence=batch_dict['x_target'],
                             sample_probability=1.)
@@ -81,7 +81,7 @@ class NMTSampler:
         return sentence_from_indices(indices, vocab, return_string=return_string)
     
     def _get_reference_sentence(self, index, return_string=True):
-        indices = self._last_batch['y_target'][index].cpu().detach().numpy()
+        indices = self._last_batch['target_unigrams_vector'][index].cpu().detach().numpy()
         vocab = self.vectorizer.target_vocab
         return sentence_from_indices(indices, vocab, return_string=return_string)
     
@@ -208,7 +208,7 @@ class NMTSampler:
                   "sampled_normalized":sampled_normalized,
                   "reference_gt":ref_gt,
                   "mrs_gt":gt_mrs,
-                  "y_target": self._last_batch['y_target'][index],
+                  "target_unigrams_vector": self._last_batch['target_unigrams_vector'][index],
                   "overgenerated":best_score_overgenerated,
                   "undergenerated":best_score_undergenerated
                  }

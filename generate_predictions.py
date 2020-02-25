@@ -32,7 +32,7 @@ import numpy as np
 args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
                  vectorizer_file="test.json",
                  model_state_file="test.pth",
-                 save_dir="data/trained_models/",
+                 save_dir="data/trained_models/15/",
                  cuda=True,
                  seed=1337,
                  batch_size=1,
@@ -54,13 +54,21 @@ torch.cuda.manual_seed_all(args.seed)
 
 args.device = torch.device("cuda" if args.cuda else "cpu")
 
-dataset = NMTDataset.load_dataset_and_load_vectorizer(args.dataset_csv, args.save_dir+args.vectorizer_file)
+#dataset = NMTDataset.load_dataset_and_load_vectorizer(args.dataset_csv, args.save_dir+args.vectorizer_file)
+dataset = NMTDataset.load_dataset_and_make_vectorizer(args.dataset_csv)
 
 vectorizer = dataset.get_vectorizer()
 
+target_bigrams_size = len(vectorizer.target_vocab.bigrams)
+target_unigrams_size = len(vectorizer.target_vocab) - target_bigrams_size
+
+print(target_unigrams_size)
+print(target_bigrams_size)
+
 model = NMTModel(source_vocab_size=len(vectorizer.source_vocab), 
                  source_embedding_size=args.source_embedding_size, 
-                 target_vocab_size=len(vectorizer.target_vocab),
+                 target_unigrams_size=target_unigrams_size,
+                 target_bigrams_size=target_bigrams_size,
                  target_embedding_size=args.target_embedding_size, 
                  encoding_size=args.encoding_size,
                  target_bos_index=vectorizer.target_vocab.begin_seq_index,

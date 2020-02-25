@@ -31,10 +31,13 @@ def beam_search_decoder(data, k):
         
     return sequences
 
-
 def sentence_from_indices(indices, vocab, strict=True, return_string=True):
     ignore_indices = set([vocab.mask_index, vocab.begin_seq_index, vocab.end_seq_index])
     out = []
+
+    if len(indices.shape) == 2:
+        indices = np.argmax(indices, axis=1)
+
     for index in indices:
         if index == vocab.begin_seq_index and strict:
             continue

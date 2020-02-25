@@ -106,6 +106,11 @@ def normalize_sizes(y_pred, y_true):
         y_true = y_true.contiguous().view(-1)
     return y_pred, y_true
 
+def investigate_empty_word_distribution(y_pred):
+    y_pred = torch.nn.functional.softmax(y_pred, dim=-1)
+    begin_empty = y_pred[:, 0, 18]
+    print(begin_empty.sum())
+
 def compute_accuracy(y_pred, y_true, mask_index, batch_index):
     # print(y_pred.shape)
     # #y_pred, y_true = normalize_sizes(y_pred, y_true)
@@ -160,8 +165,9 @@ def sequence_loss(y_pred, y_true, mask_index, batch_index):
 
     return loss
 
-def multi_task_loss(y_pred, y_true, mask_idex, batch_idex):
-    pass
+def multi_task_loss(y_pred, y_true):
+    loss_mse = F.mse_loss(y_pred.double(), y_true.double())
+    return loss_mse
 
 args = Namespace(dataset_csv="data/inp_and_gt_name_near_food_no_inform.csv",
                  vectorizer_file="test.json",
@@ -280,6 +286,8 @@ try:
         
         running_loss = 0.0
         running_acc = 0.0
+        running_unigram_loss = 0.0
+        running_bigram_loss = 0.0
 
         model.train()
 
@@ -294,12 +302,17 @@ try:
                            batch_dict['x_target'],
                            sample_probability=sample_probability)
 
-            print(y_pred_bigrams.shape)
-            print(batch_dict['target_bigrams_vector'].shape)
+            #investigate_empty_word_distribution(y_pred)
+            
 
-            # step 3. compute the loss
-            loss = sequence_loss(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
-
+            # step 3. compute the unigram loss
+            loss_unigram = sequence_loss(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
+            
+            # step 4. compute the bigram loss
+            loss_bigram = 10000*multi_task_loss(y_pred_bigrams, batch_dict['target_bigrams_vector'])
+            loss_bigram = loss_bigram.double()
+            
+            loss = loss_unigram #+ loss_bigram   
             #start = time.time()
 
             # step 4. use loss to produce gradients
@@ -314,12 +327,14 @@ try:
 
             # step 6. compute the running loss and the running accuracy
             running_loss += (loss.item() - running_loss) / (batch_index + 1)
+            running_unigram_loss += (loss_unigram.item() - running_unigram_loss) / (batch_index + 1)
+            running_bigram_loss += (loss_bigram.item() - running_bigram_loss) / (batch_index + 1)
 
             acc_t = compute_accuracy(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
             running_acc += (acc_t - running_acc) / (batch_index + 1)
 
              # step 7. update bar
-            train_bar.set_postfix(loss=running_loss, acc=running_acc, epoch=epoch_index)
+            train_bar.set_postfix(loss=running_loss, unigram_loss=running_unigram_loss, bigram_loss=running_bigram_loss, acc=running_acc, epoch=epoch_index)
 
             train_bar.update()
 
@@ -338,27 +353,35 @@ try:
 
         running_loss = 0.
         running_acc = 0.
+        running_u_loss = 0.
+        running_b_loss = 0.
+
         model.eval()
 
         for batch_index, batch_dict in enumerate(batch_generator):
             # compute the output
-            y_pred, _ = model(batch_dict['x_source'], 
+            y_pred, y_pred_bigrams, _ = model(batch_dict['x_source'], 
                            batch_dict['x_source_length'], 
                            batch_dict['x_target'],
                            sample_probability=1.)
 
             # step 3. compute the loss
-            loss = sequence_loss(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
+            loss_u = sequence_loss(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
+            loss_b = 10000*multi_task_loss(y_pred_bigrams, batch_dict['target_bigrams_vector'] )
+
+            loss = loss_u + loss_b
 
             # compute the running loss and accuracy
             running_loss += (loss.item() - running_loss) / (batch_index + 1)
-            
+            running_u_loss += (loss_u.item() - running_u_loss) / (batch_index + 1)
+            running_b_loss += (loss_b.item() - running_b_loss) / (batch_index + 1)
+
             acc_t = compute_accuracy(y_pred, batch_dict['target_unigrams_vector'], mask_index, batch_index)
             running_acc += (acc_t - running_acc) / (batch_index + 1)
             
             # Update bar
             val_bar.set_postfix(loss=running_loss, acc=running_acc, 
-                            epoch=epoch_index)
+                            epoch=epoch_index, unigram_loss=running_u_loss, bigram_loss=running_b_loss)
             val_bar.update()
 
         train_state['val_loss'].append(running_loss)

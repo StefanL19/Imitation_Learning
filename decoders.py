@@ -81,7 +81,7 @@ class NMTDecoder(nn.Module):
         self.target_bigram_embedding = nn.Embedding(num_embeddings=num_bigram_embeddings, 
                                              embedding_dim=embedding_size, 
                                              padding_idx=0)                                 
-        freeze_layer(self.target_unigram_embedding)
+        # freeze_layer(self.target_unigram_embedding)
         freeze_layer(self.target_bigram_embedding)
 
         self.gru_cell = nn.GRUCell(embedding_size + rnn_hidden_size, 
@@ -98,7 +98,7 @@ class NMTDecoder(nn.Module):
         # The idea is that we will generate an embedding vector and this embedding vector
         # will be compared to all embedding vectors in the target vocabulary
         # the one with the most similarity will be returned
-        self.classifier = nn.Linear(rnn_hidden_size, embedding_size)
+        self.classifier = nn.Linear(rnn_hidden_size, num_unigram_embeddings)
         self.bigram_classifier = nn.Linear(rnn_hidden_size, embedding_size)
 
         self.bos_index = bos_index
@@ -210,20 +210,21 @@ class NMTDecoder(nn.Module):
             embedding_prediction = self.classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
             bigram_prediction = self.bigram_classifier(F.dropout(prediction_vector, 0.3, training=self.training_mode))
 
-            all_target_unigram_indices = torch.arange(0, self.num_unigram_embeddings, dtype=torch.long).to(encoder_state.device)
+            #all_target_unigram_indices = torch.arange(0, self.num_unigram_embeddings, dtype=torch.long).to(encoder_state.device)
             all_target_bigram_indices = torch.arange(0, self.num_bigram_embeddings, dtype=torch.long).to(encoder_state.device)
 
-            target_unigram_embeddings = self.target_unigram_embedding(all_target_unigram_indices)
+            #target_unigram_embeddings = self.target_unigram_embedding(all_target_unigram_indices)
             target_bigram_embeddings = self.target_bigram_embedding(all_target_bigram_indices)
 
             # Some matrix normalization may be performed to get cosine similarity, but 
             # embedding_prediction_norm = embedding_prediction / embedding_prediction.norm(dim=1)[:, None]
             # target_vocab_embeddings = target_vocab_embeddings / target_vocab_embeddings.norm(dim=1)[:, None]
 
-            res = torch.mm(target_unigram_embeddings, embedding_prediction.transpose(0,1))
+            #res = torch.mm(target_unigram_embeddings, embedding_prediction.transpose(0,1))
             bigram_res = torch.mm(target_bigram_embeddings, bigram_prediction.transpose(0,1))
 
-            dot_similarity = res.transpose(0, 1)
+            dot_similarity = embedding_prediction #res.transpose(0, 1)
+
             bigram_dot_similarity = bigram_res.transpose(0, 1)
 
             # We will be using Sparsemax Loss, so we can do the sparsemax activation earlier
